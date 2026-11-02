@@ -29,9 +29,8 @@ const SELF = new Set(['zip', 'tar', 'appimage', 'deb', 'rpm']);
 // no-sandbox switch carry over (not a link it was opened with, nor debug flags).
 const relaunchArgs = () => process.argv.slice(1).filter((a) => /^--(user-data-dir=.+|no-sandbox)$/.test(a));
 const exeDir = () => path.dirname(process.execPath);
-// The program's file name from the release after 5.2.0 on (5.2.0 still uses the
-// old one, so copies older than 5.2.0 can update themselves to it). A download
-// may have either; the updater copies it in, removes the old one and starts it.
+// The program's file name. If a download has it under a different name than this
+// copy (it was renamed), the updater copies it in, removes the old one and starts it.
 const NEXT_EXE = process.platform === 'win32' ? 'Null Grid.exe' : 'null-grid';
 
 function writable(dir) {

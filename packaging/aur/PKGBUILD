@@ -12,7 +12,7 @@ pkgdesc="Null Grid: vertical tab sidebar browser with ad blocking, hostname-only
 arch=('x86_64' 'aarch64')
 url="https://search.nullgrid.dev"
 license=('unknown')
-provides=('nullgrid-browser' 'node-grid')
+provides=('nullgrid-browser' 'null-grid')
 conflicts=('nullgrid-browser')
 depends=('gtk3' 'nss' 'libxss' 'libxtst' 'libnotify' 'at-spi2-core' 'libsecret' 'xdg-utils' 'libdrm' 'libxcomposite' 'libxdamage' 'libxrandr' 'libxkbcommon' 'mesa')
 options=('!strip')
@@ -46,18 +46,20 @@ package() {
   chmod 4755 "${_instdir}/chrome-sandbox"
 
   install -dm755 "${pkgdir}/usr/bin"
-  ln -s "/opt/${pkgname%-bin}/node-grid" "${pkgdir}/usr/bin/node-grid"
+  ln -s "/opt/${pkgname%-bin}/null-grid" "${pkgdir}/usr/bin/null-grid"
 
   install -dm755 "${pkgdir}/usr/share/applications"
-  install -m644 /dev/stdin "${pkgdir}/usr/share/applications/dev.nullgrid.nullgrid.desktop" <<EOF
+  install -m644 /dev/stdin "${pkgdir}/usr/share/applications/null-grid.desktop" <<EOF
 [Desktop Entry]
 Name=Null Grid
 Comment=${pkgdesc}
-Exec=node-grid %U
+Exec=null-grid %U
 Terminal=false
 Type=Application
 Icon=dev.nullgrid.nullgrid
 Categories=Network;WebBrowser;
+MimeType=x-scheme-handler/http;x-scheme-handler/https;text/html;application/xhtml+xml;
+StartupWMClass=null-grid
 EOF
 
   install -Dm644 "${srcdir}/dev.nullgrid.nullgrid.png" \

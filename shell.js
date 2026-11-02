@@ -559,7 +559,7 @@ window.shell.onState((s) => {
       where.textContent = full;
     }
   }
-  document.title = active && active.title ? `${active.title} :: Null Grid` : 'Null Grid';
+  document.title = active && active.title ? `${active.title} - Null Grid` : 'Null Grid';   // same as the window's own title
   body.classList.toggle('burner-active', !!(active && active.burnEnds));
   renderSaved(s.saved || []);
   renderLoadouts(s.loadouts || []);

@@ -12,30 +12,15 @@ const ROOT = path.resolve(__dirname, '..');
 const OLD = /node[-_ ]?grid/i;
 // Kept on purpose. Each entry: file, a pattern the line must match, and why.
 const ALLOWED = [
-  // carrying data over from before the rename (main.js "renamed" section) + old loadout links + an old game score
-  ['main.js', /LEGACY_NAME = 'NODE_GRID'|LEGACY_FLATPAK = 'dev\.nullgrid\.nodegrid'|renamed: NODE_GRID is now Null Grid|\['nodegrid-(ai|sim)', 'nullgrid-(ai|sim)'\]|nodegrid:\\\/\\\//, 'migration'],
+  // carrying data over from before the rename (main.js "renamed" section), old loadout links, an old game
+  // score, and the old Linux launcher (default browser) -- needed so updating loses nothing; never shown
+  ['main.js', /LEGACY_NAME = 'NODE_GRID'|LEGACY_FLATPAK = 'dev\.nullgrid\.nodegrid'|renamed: NODE_GRID is now Null Grid|\['nodegrid-(ai|sim)', 'nullgrid-(ai|sim)'\]|nodegrid:\\\/\\\/|OLD_DESKTOP_ID = 'node-grid\.desktop'|launcher was node-grid\.desktop|'node-grid\.png'/, 'migration'],
   ['runner.js', /'nodegrid-runner-hi'/, 'migration'],
   ['package.json', /\.var\/app\/dev\.nullgrid\.nodegrid:ro/, 'migration: the old Flatpak\'s data'],
+  ['tests/ui-defaultbrowser.test.js', /node-grid\.desktop/, 'migration test'],
   // the Null Search site (another repo) still calls the Drive bridge by its old name
   ['tab-preload.js', /exposeInMainWorld\('nodegridDrive'/, 'Null Search site'],
   ['tests/fixtures/search-site/results.html', /nodegridDrive/, 'Null Search site'],
-  // two-step rename: 5.2.0 keeps the program file names so older copies can update themselves
-  ['package.json', /"executableName": "node-grid"|"desktopName": "node-grid\.desktop"|--executable-name=NODE_GRID/, 'program file name'],
-  ['main.js', /node-grid\.desktop|StartupWMClass=node-grid/, 'program file name'],
-  ['settings.js', /node-grid\.desktop/, 'program file name'],
-  ['README.md', /node-grid\.desktop/, 'program file name'],
-  ['packaging/aur/PKGBUILD', /node-grid/, 'program file name'],
-  ['packaging/aur/.SRCINFO', /provides = node-grid/, 'program file name'],
-  ['packaging/flathub/dev.nullgrid.nullgrid.desktop', /=node-grid/, 'program file name'],
-  ['packaging/flathub/dev.nullgrid.nullgrid.yml', /command: node-grid/, 'program file name'],
-  ['tests/selfupdate.test.js', /'NODE_GRID\.exe' : 'node-grid'/, 'program file name'],
-  ['tests/ui-defaultbrowser.test.js', /node-grid\.desktop/, 'program file name'],
-  // fixed by Microsoft for good: the Store app's id inside the package (part of its taskbar/Start identity)
-  ['package.json', /"applicationId": "NODEGRID"/, 'Store id'],
-  ['main.js', /!NODEGRID/, 'Store id'],
-  // saying it was renamed, once
-  ['README.md', /\(Formerly NODE_GRID\.\)/, 'rename note'],
-  ['whats-new.json', /NODE_GRID is now/, 'rename note'],
   // the history of the rename itself, and of earlier versions' packaging (true for what they shipped)
   ['docs/HISTORY.md', /.*/, 'history'],
   // this test, and the test of updating from before the rename

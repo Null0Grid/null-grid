@@ -9,7 +9,7 @@
     "test": "node tests/drive.test.js",
     "test:ui": "node tests/ui-drive.test.js",
     "test:ui:pipdock": "node tests/ui-pipdock.test.js",
-    "dist": "electron-packager . \"Null Grid\" --executable-name=NODE_GRID --platform=win32 --arch=x64 --icon=icon.ico --out=dist --overwrite --asar --ignore=\"^/dist\" --ignore=\"^/build\" --ignore=\"^/store-dist\" --ignore=\"^/walkthrough/src\" --ignore=\"INSTALL\\.bat\" --ignore=\"README\\.txt\"",
+    "dist": "electron-packager . \"Null Grid\" --app-copyright=\"Copyright © 2026 Null Labs\" --win32metadata.CompanyName=\"Null Labs\" --platform=win32 --arch=x64 --icon=icon.ico --out=dist --overwrite --asar --ignore=\"^/dist\" --ignore=\"^/build\" --ignore=\"^/store-dist\" --ignore=\"^/walkthrough/src\" --ignore=\"INSTALL\\.bat\" --ignore=\"README\\.txt\"",
     "store": "electron-builder --win appx --x64 --publish never",
     "dist:linux": "electron-builder --linux deb rpm AppImage tar.gz --x64 --arm64 --publish never",
     "dist:linux:flatpak": "electron-builder --linux flatpak --x64 --publish never",
@@ -82,7 +82,7 @@
       "identityName": "FILLED_IN_BY_THE_STORE_KIT",
       "publisher": "CN=FILLED_IN_BY_THE_STORE_KIT",
       "publisherDisplayName": "FILLED_IN_BY_THE_STORE_KIT",
-      "applicationId": "NODEGRID",
+      "applicationId": "NULLGRID",
       "displayName": "Null Grid",
       "backgroundColor": "#0a0a0f",
       "languages": [
@@ -142,7 +142,7 @@
       "category": "Network;WebBrowser",
       "synopsis": "Null Grid: vertical tab sidebar browser with ad blocking and a login vault.",
       "maintainer": "Null Labs <support@nullgrid.dev>",
-      "executableName": "node-grid",
+      "executableName": "null-grid",
       "syncDesktopName": true,
       "mimeTypes": [
         "x-scheme-handler/http",
@@ -222,9 +222,10 @@
     },
     "appImage": {
       "artifactName": "Null-Grid-${version}-${arch}.${ext}"
-    }
+    },
+    "copyright": "Copyright © 2026 Null Labs"
   },
   "author": "Null Labs",
   "homepage": "https://search.nullgrid.dev",
-  "desktopName": "node-grid.desktop"
+  "desktopName": "null-grid.desktop"
 }

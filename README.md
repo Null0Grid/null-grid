@@ -1,6 +1,6 @@
 # Null Grid
 
-**A vertical-tab desktop browser with ad blocking, a login vault, and a direct line to your own files.** It's part of the **[Null](https://nullgrid.dev)** Suite by Null Labs, alongside Null Search, Null Notes and Null Drive. (Formerly NODE_GRID.)
+**A vertical-tab desktop browser with ad blocking, a login vault, and a direct line to your own files.** It's part of the **[Null](https://nullgrid.dev)** Suite by Null Labs, alongside Null Search, Null Notes and Null Drive.
 
 ![Settings → Null Drive, connected](docs/screenshots/null-drive-settings.png)
 
@@ -41,7 +41,7 @@
 
 ## Make it your default browser
 
-- **Linux (incl. Omarchy):** Settings → DEFAULT BROWSER → **MAKE DEFAULT**. Or by hand: `xdg-settings set default-web-browser node-grid.desktop`
+- **Linux (incl. Omarchy):** Settings → DEFAULT BROWSER → **MAKE DEFAULT**. Or by hand: `xdg-settings set default-web-browser null-grid.desktop`
 - **Windows (Microsoft Store version):** Settings → DEFAULT BROWSER → **OPEN DEFAULT APPS**, pick Null Grid, and set it for HTTP, HTTPS and .html. (Windows only lets you choose this yourself.)
 
 ## How it connects to Null Grid

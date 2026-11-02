@@ -4,9 +4,9 @@
 // desktop settings are never touched):
 //   1. before: Settings says another browser (or none) is the default
 //   2. MAKE DEFAULT registers this copy (writes ~/.local/share/applications/
-//      node-grid.desktop with http/https/html, since no package installed one)
+//      null-grid.desktop with http/https/html, since no package installed one)
 //      and sets it with xdg-settings / xdg-mime
-//   3. after: xdg-settings itself reports node-grid.desktop, the http/https
+//   3. after: xdg-settings itself reports null-grid.desktop, the http/https
 //      handlers point at it, and Settings says Null Grid is the default
 // Linux only; needs xdg-utils and an X display (xvfb-run).
 //
@@ -43,26 +43,45 @@ async function waitFor(fn, timeoutMs = 10000) {
     const s = await waitFor(() => app.windows().find((w) => /settings\.html/.test(w.url())), 8000);
     await s.waitForSelector('#browserstat');
     await check('before: Settings says Null Grid is not the default', async () => assert.ok(!/is your default browser/.test(await s.textContent('#browserstat')), await s.textContent('#browserstat')));
-    await check('before: xdg-settings agrees', () => assert.notStrictEqual(xdg('xdg-settings', 'get', 'default-web-browser'), 'node-grid.desktop'));
+    await check('before: xdg-settings agrees', () => assert.notStrictEqual(xdg('xdg-settings', 'get', 'default-web-browser'), 'null-grid.desktop'));
 
     await s.click('#browsermake');
     await check('MAKE DEFAULT registers this copy (launcher entry with http/https/html)', async () => {
-      const f = path.join(home, '.local', 'share', 'applications', 'node-grid.desktop');
+      const f = path.join(home, '.local', 'share', 'applications', 'null-grid.desktop');
       assert.ok(await waitFor(() => fs.existsSync(f), 6000), 'no ' + f);
       const d = fs.readFileSync(f, 'utf8');
       assert.ok(/^Exec=.+ %U$/m.test(d), d);
       assert.ok(/MimeType=.*x-scheme-handler\/http;.*x-scheme-handler\/https;.*text\/html;/.test(d), d);
       assert.ok(/Categories=Network;WebBrowser;/.test(d), d);
     });
-    await check('after: xdg-settings reports Null Grid as the default browser', async () => assert.ok(await waitFor(() => xdg('xdg-settings', 'get', 'default-web-browser') === 'node-grid.desktop', 6000), xdg('xdg-settings', 'get', 'default-web-browser')));
+    await check('after: xdg-settings reports Null Grid as the default browser', async () => assert.ok(await waitFor(() => xdg('xdg-settings', 'get', 'default-web-browser') === 'null-grid.desktop', 6000), xdg('xdg-settings', 'get', 'default-web-browser')));
     await check('after: http and https links go to Null Grid', () => {
-      assert.strictEqual(xdg('xdg-mime', 'query', 'default', 'x-scheme-handler/http'), 'node-grid.desktop');
-      assert.strictEqual(xdg('xdg-mime', 'query', 'default', 'x-scheme-handler/https'), 'node-grid.desktop');
+      assert.strictEqual(xdg('xdg-mime', 'query', 'default', 'x-scheme-handler/http'), 'null-grid.desktop');
+      assert.strictEqual(xdg('xdg-mime', 'query', 'default', 'x-scheme-handler/https'), 'null-grid.desktop');
     });
     await check('after: Settings says Null Grid is your default browser', async () => assert.ok(await waitFor(async () => /is your default browser/.test(await s.textContent('#browserstat')), 6000)));
   } finally {
     await app.close().catch(() => {});
     fs.rmSync(home, { recursive: true, force: true });
+  }
+
+  // Default browser from before the rename (launcher node-grid.desktop): it moves to null-grid.desktop by itself.
+  const home2 = fs.mkdtempSync(path.join(os.tmpdir(), 'ng-home-'));
+  const env2 = { ...env, HOME: home2, XDG_CONFIG_HOME: path.join(home2, '.config'), XDG_DATA_HOME: path.join(home2, '.local', 'share') };
+  const xdg2 = (...a) => { try { return execFileSync(a[0], a.slice(1), { env: env2, encoding: 'utf8' }).trim(); } catch { return ''; } };
+  const apps = path.join(home2, '.local', 'share', 'applications');
+  fs.mkdirSync(apps, { recursive: true });
+  const OLD = 'node-grid.desktop';
+  fs.writeFileSync(path.join(apps, OLD), '[Desktop Entry]\nName=Old\nExec=/bin/true %U\nType=Application\nMimeType=x-scheme-handler/http;x-scheme-handler/https;text/html;\n');
+  xdg2('xdg-settings', 'set', 'default-web-browser', OLD);
+  const app2 = await pw._electron.launch({ args: [APP_DIR, '--user-data-dir=' + path.join(home2, 'ud')], executablePath: electronPath, env: env2 });
+  try {
+    await waitFor(() => app2.windows().find((w) => /shell\.html$/.test(w.url())), 15000);
+    await check('updated from before the rename: the default browser moves to null-grid.desktop by itself', async () => assert.ok(await waitFor(() => xdg2('xdg-settings', 'get', 'default-web-browser') === 'null-grid.desktop', 10000), xdg2('xdg-settings', 'get', 'default-web-browser')));
+    await check('...and the old launcher file is gone, the new one is there', () => { assert.ok(!fs.existsSync(path.join(apps, OLD))); assert.ok(fs.existsSync(path.join(apps, 'null-grid.desktop'))); });
+  } finally {
+    await app2.close().catch(() => {});
+    fs.rmSync(home2, { recursive: true, force: true });
   }
   if (failed) { console.log('DEFAULT BROWSER TEST FAILED'); process.exit(1); }
   console.log('ALL DEFAULT BROWSER TESTS PASS');

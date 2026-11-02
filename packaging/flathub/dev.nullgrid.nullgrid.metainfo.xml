@@ -9,7 +9,7 @@
        public" section. -->
   <project_license>GPL-2.0-only</project_license>
   <developer id="dev.nullgrid">
-    <name>Null Grid</name>
+    <name>Null Labs</name>
   </developer>
   <url type="homepage">https://search.nullgrid.dev</url>
   <url type="bugtracker">https://github.com/Null0Grid/null-grid/issues</url>

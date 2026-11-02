@@ -16,7 +16,7 @@ runtime-version: "25.08"
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: "25.08"
-command: node-grid
+command: null-grid
 
 finish-args:
   # Network: the browser's whole purpose, plus Null Search/Null Drive/Null Notes talk to it

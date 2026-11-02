@@ -28,7 +28,7 @@ const OLD = process.env.SU_OLD, NEW = process.env.SU_NEW, NEWV = process.env.SU_
 if (!OLD || !NEW) { console.error('set SU_OLD and SU_NEW'); process.exit(2); }
 const WIN = process.platform === 'win32';
 const KIND = WIN ? 'zip' : 'tar';
-const EXE = WIN ? 'NODE_GRID.exe' : 'node-grid';
+const EXE = WIN ? 'Null Grid.exe' : 'null-grid';
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 async function waitFor(fn, timeoutMs = 10000) {
   const t0 = Date.now();

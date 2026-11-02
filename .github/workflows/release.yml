@@ -229,6 +229,8 @@ jobs:
             dist/linux/*.tar.gz
             dist/windows/*.zip
           body: |
+            **Updating the portable Windows .zip or the Linux .tar.gz from 5.1.x?** Download this version by hand once (the program file was renamed, so those copies can't swap it in themselves). From 5.2.0 on they update themselves again. Every other kind updates as usual.
+
             **Windows:** unzip `Null-Grid-${{ needs.version.outputs.version }}-win32-x64.zip` and run the program inside (portable, no installer), or get it from the Microsoft Store.
             **Linux — x64 and arm64:**
             - Any distro, no install needed: download `Null-Grid-${{ needs.version.outputs.version }}-x86_64.AppImage` (x64) or `Null-Grid-${{ needs.version.outputs.version }}-arm64.AppImage`, `chmod +x` it, and run it.

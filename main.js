@@ -223,13 +223,13 @@ function openLinks(links) {
 // (Chromium's picture-in-picture window) only gets the process's ID, so it
 // showed up as a second Null Grid button. Setting the process ID gives every
 // window the same one. Installed from the Store, it has to be the package's
-// own ID (<package family>!NODEGRID) so it also matches the pinned icon.
+// own ID (<package family>!NULLGRID) so it also matches the pinned icon.
 function windowsAppId() {
   if (process.windowsStore) {
     // installed under ...\WindowsApps\<Name>_<Version>_<Arch>_<Resource>_<PublisherId>\...
     for (let d = path.dirname(process.execPath); path.dirname(d) !== d; d = path.dirname(d)) {
       const m = /^([^_]+)_[\d.]+_[^_]*_[^_]*_([a-z0-9]{13})$/i.exec(path.basename(d));
-      if (m) return `${m[1]}_${m[2]}!NODEGRID`;
+      if (m) return `${m[1]}_${m[2]}!NULLGRID`;
     }
   }
   return 'electron.app.' + app.getName();   // what Electron already put on the main window (keeps existing pins)
@@ -371,6 +371,7 @@ function createWindow(opts = {}) {
   });
 
   w.on('closed', () => closeCtx(c));
+  w.on('page-title-updated', (e) => e.preventDefault());   // the window's title is set from its tab (pushStateHere), not the frame page
   // Coming back to the window: keyboard goes to the page, not the sidebar/toolbar
   w.on('focus', () => {
     lastFocused = c;
@@ -1171,11 +1172,11 @@ ipcMain.on('gear:open', (e) => { if (gearView && e.sender === gearView.webConten
 
 // ---------- default browser ----------
 // Settings > DEFAULT BROWSER. Linux (incl. Omarchy): the .deb/.rpm already install
-// node-grid.desktop, which declares http/https/html; an AppImage or .tar.gz writes
+// null-grid.desktop, which declares http/https/html; an AppImage or .tar.gz writes
 // that same launcher entry for this user first. Then xdg-settings/xdg-mime make it
 // the default. Windows only lets the person choose, so there it opens Default apps.
 // Flatpak and Snap have their own sandboxed rules, so they're left out.
-const DESKTOP_ID = 'node-grid.desktop';
+const DESKTOP_ID = 'null-grid.desktop';
 const WEB_MIME = ['x-scheme-handler/http', 'x-scheme-handler/https', 'text/html', 'application/xhtml+xml'];
 const runCmd = (cmd, args) => new Promise((resolve) => {
   try { require('child_process').execFile(cmd, args, { timeout: 8000 }, (err, out) => resolve(err ? null : String(out || '').trim())); }
@@ -1203,7 +1204,7 @@ function writeUserDesktopFile() {
   const file = path.join(appsDir, DESKTOP_ID);
   fs.writeFileSync(file, [
     '[Desktop Entry]', 'Name=Null Grid', 'GenericName=Web Browser', 'Comment=Null Grid web browser',
-    'Exec=' + exec.replace(/\\/g, '\\\\') + ' %U', 'Terminal=false', 'Type=Application', 'Icon=null-grid', 'StartupWMClass=node-grid',
+    'Exec=' + exec.replace(/\\/g, '\\\\') + ' %U', 'Terminal=false', 'Type=Application', 'Icon=null-grid', 'StartupWMClass=null-grid',
     'StartupNotify=true', 'Categories=Network;WebBrowser;', 'MimeType=' + WEB_MIME.join(';') + ';', ''
   ].join('\n'));
   runCmd('update-desktop-database', [appsDir]);
@@ -1215,6 +1216,23 @@ async function defaultBrowserInfo() {
   if (sandboxed()) return { platform: 'linux', state: 'sandboxed' };
   const cur = await runCmd('xdg-settings', ['get', 'default-web-browser']);
   return { platform: 'linux', state: cur == null ? 'unknown' : cur === DESKTOP_ID ? 'yes' : 'no', current: cur || '' };
+}
+// Before the rename the launcher was node-grid.desktop. If that was the default
+// browser, the default moves to null-grid.desktop, and a launcher file this app
+// wrote for an AppImage / .tar.gz copy under the old name is replaced. Once.
+const OLD_DESKTOP_ID = 'node-grid.desktop';
+async function carryLauncher() {
+  if (process.platform !== 'linux' || sandboxed() || settings.launcherCarried) return;
+  const dataHome = process.env.XDG_DATA_HOME || path.join(app.getPath('home'), '.local', 'share');
+  const oldUser = path.join(dataHome, 'applications', OLD_DESKTOP_ID);
+  const hadOld = fs.existsSync(oldUser);
+  if ((await runCmd('xdg-settings', ['get', 'default-web-browser'])) === OLD_DESKTOP_ID) await makeDefaultBrowser();
+  else if (hadOld && !systemDesktopFile()) { try { writeUserDesktopFile(); } catch {} }   // keep its menu entry, under the new name
+  if (hadOld) {
+    for (const f of [oldUser, path.join(dataHome, 'icons', 'hicolor', '512x512', 'apps', 'node-grid.png')]) { try { fs.unlinkSync(f); } catch {} }
+    runCmd('update-desktop-database', [path.join(dataHome, 'applications')]);
+  }
+  settings.launcherCarried = true; saveSettings();
 }
 async function makeDefaultBrowser() {
   if (process.platform === 'win32') {
@@ -4148,6 +4166,7 @@ app.whenReady().then(async () => {
   setupAiSession();
   hookAdblock(session.fromPartition(RADIO_PARTITION));
   createWindow({ first: true });
+  carryLauncher().catch(() => {});
   initAdblock();
 });
 app.on('window-all-closed', () => app.quit());

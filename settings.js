@@ -280,7 +280,7 @@
           let r = null;
           try { r = await S.do('default-browser'); } catch { r = null; }
           if (r && r.model) { M = r.model; render(); }
-          toast(r && r.ok ? 'Null Grid is now your default browser' : r && r.reason === 'write' ? "Couldn't write the launcher file in ~/.local/share/applications" : "Couldn't set it. Try: xdg-settings set default-web-browser node-grid.desktop", !(r && r.ok));
+          toast(r && r.ok ? 'Null Grid is now your default browser' : r && r.reason === 'write' ? "Couldn't write the launcher file in ~/.local/share/applications" : "Couldn't set it. Try: xdg-settings set default-web-browser null-grid.desktop", !(r && r.ok));
         }, 'primary');
         mk.id = 'browsermake';
         const br = el('div', 'drow'); br.append(mk); sb.append(br);
@@ -345,6 +345,7 @@
     // ABOUT
     const s8 = section('about', 'ABOUT');
     s8.append(row('Version', null, el('span', 'state', 'v' + M.version)));
+    s8.append(row('Made by', 'Null Grid is part of the Null Suite', el('span', 'state', '© 2026 Null Labs')));
     const ab = el('div', 'drow');
     ab.append(button("WHAT'S NEW", () => act('whats-new')), ...(M.hasTour ? [button('WATCH THE WALKTHROUGH', () => act('tour'))] : []));
     s8.append(ab);

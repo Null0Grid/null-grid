@@ -1,8 +1,7 @@
 {
   "5.2.0": {
-    "title": "NODE_GRID is now Null Grid",
+    "title": "More than one window",
     "new": [
-      "NODE_GRID is now called Null Grid. Same browser, new name: your settings, favorites, history, saved logins, Vault and sign-ins all came with it.",
       "Ctrl+N opens a new window, with tabs of its own. Also in a tab's right-click menu, and by right-clicking NEW TAB.",
       "Drag a tab out of the window to give it a window of its own, or drop it on another Null Grid window's tabs to move it there. Right-click a tab > Move to new window / Move to window does the same. The page keeps running while it moves.",
       "Each window has its own tabs, panels, AI panel and radio. Settings, favorites, history, logins and downloads are shared by every window.",
