@@ -7,7 +7,9 @@
       "Each window has its own tabs, panels, AI panel and radio. Settings, favorites, history, logins and downloads are shared by every window.",
       "After an update restart, every window comes back with its own tabs."
     ],
-    "fixed": []
+    "fixed": [
+      "CLOSE on the \"not secure\" warning sometimes left you on the warning instead of taking you back. It now always goes back to the page you came from."
+    ]
   },
   "5.1.7": {
     "title": "Tabs on top",

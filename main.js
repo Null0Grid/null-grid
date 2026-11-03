@@ -2377,7 +2377,16 @@ ipcMain.on('insecure:choose', (e, choice) => {
   const host = httpHostOf(url);
   if (choice === 'close') {                       // never went in: back where you were, or the tab goes
     insecureWaiting.delete(wc.id);
-    if (wc.navigationHistory.canGoBack()) wc.navigationHistory.goBack(); else closeTab(t.id);
+    // The blocked address itself can be left in the history right behind the warning;
+    // plain Back would land on it and stop at the warning again. Go back past every
+    // entry for that site (and past the warning page) to the page you came from.
+    const h = wc.navigationHistory, list = h.getAllEntries();
+    let to = -1;
+    for (let i = h.getActiveIndex() - 1; i >= 0; i--) {
+      const u = list[i].url;
+      if (!isInsecurePage(u) && httpHostOf(u) !== host) { to = i; break; }
+    }
+    if (to >= 0) h.goToIndex(to); else closeTab(t.id);
     return;
   }
   if (choice === 'trust') { settings.httpTrusted = [...new Set([...httpTrusted(), host])]; saveSettings(); toast(`${host} is trusted: logins can be saved and filled there`); }
