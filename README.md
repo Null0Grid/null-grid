@@ -132,4 +132,6 @@ See [SECURITY.md](SECURITY.md) for what's encrypted where, and how to report a p
 
 ## License
 
-No license file is included yet — add one before relying on this repo being public in a way that satisfies the GPL-2.0 obligation above.
+Null Grid is free software, licensed under the **GNU General Public License v3.0 only** (`GPL-3.0-only`); see [LICENSE](LICENSE). The SIM game's engine, `doomgeneric`, is licensed "GPL-2.0 or any later version", so it ships under GPL-3.0 as part of Null Grid.
+
+> Null, Null Labs, the product names and the // mark are trademarks of Null Labs. The code is open source; the brand is not — forks must use their own name and logo. See the [trademark policy](https://github.com/Null0Grid/null-brand/blob/main/TRADEMARK.md).

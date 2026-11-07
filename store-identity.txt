@@ -5,7 +5,7 @@
 
 IDENTITY_NAME=NULLGRID.NullSearch
 PUBLISHER=CN=8685350B-5C4C-4422-9CDF-8AEB87F50B2F
-PUBLISHER_DISPLAY_NAME=NULLGRID
+PUBLISHER_DISPLAY_NAME=Null Labs
 
 # Must match a name reserved on this product in Partner Center exactly
 # (Product management > Product identity / "Reserve another name").

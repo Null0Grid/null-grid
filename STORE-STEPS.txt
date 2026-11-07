@@ -6,7 +6,7 @@ ONE TIME
    Sign in with your personal Microsoft account, then verify your ID
    (photo of a government ID + a selfie).
 2. Partner Center > Apps and games > + New product > "MSIX or PWA app".
-   The live listing is reserved as "Null Search" (DISPLAY_NAME in
+   The live listing is reserved as "Null Grid" (DISPLAY_NAME in
    store-identity.txt must stay exactly that).
 3. Open the app > Product identity (left menu). Copy these three values
    into store-identity.txt and save it:

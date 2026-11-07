@@ -4,10 +4,9 @@
   <name>Null Grid</name>
   <summary>Vertical tab sidebar browser with ad blocking and a login vault</summary>
   <metadata_license>CC0-1.0</metadata_license>
-  <!-- Null Grid bundles doomgeneric (GPL-2.0); update this if the app's own
-       license changes — see the main repo's README "Why this repo is
-       public" section. -->
-  <project_license>GPL-2.0-only</project_license>
+  <!-- Null Grid is GPL-3.0-only (LICENSE in the main repo). Its SIM game's
+       engine, doomgeneric, is GPL-2.0-or-later, so it ships under GPL-3.0. -->
+  <project_license>GPL-3.0-only</project_license>
   <developer id="dev.nullgrid">
     <name>Null Labs</name>
   </developer>
@@ -19,7 +18,8 @@
       Null Grid is a vertical-tab desktop browser with ad and tracker
       blocking, a safeStorage-encrypted login vault, hostname-only history,
       burner tabs, a built-in radio player, and an AI side panel. It's part
-      of Null Grid, alongside Null Search and Null Drive.
+      of the Null Suite by Null Labs, alongside Null Search, Null Notes and
+      Null Drive.
     </p>
     <p>
       The browser's own main process — never the web page — talks directly

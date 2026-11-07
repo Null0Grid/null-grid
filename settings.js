@@ -345,7 +345,7 @@
     // ABOUT
     const s8 = section('about', 'ABOUT');
     s8.append(row('Version', null, el('span', 'state', 'v' + M.version)));
-    s8.append(row('Made by', 'Null Grid is part of the Null Suite', el('span', 'state', '© 2026 Null Labs')));
+    s8.append(row('Made by', 'Null Grid is part of the Null Suite', el('span', 'state', '© NULL LABS. All rights reserved.')));
     const ab = el('div', 'drow');
     ab.append(button("WHAT'S NEW", () => act('whats-new')), ...(M.hasTour ? [button('WATCH THE WALKTHROUGH', () => act('tour'))] : []));
     s8.append(ab);
